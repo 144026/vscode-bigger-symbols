@@ -17,7 +17,9 @@
   "keywords": [
     "bigger",
     "symbols",
-    "C/C++"
+    "C",
+    "C++",
+    "cpp"
   ],
   "extensionKind": [
     "ui",
