@@ -62,7 +62,7 @@
           "bigger-symbols.darkThemeNamespaceCSS": {
             "type": "string",
             "default": "font-size:120%; font-weight:bold; text-shadow: 1px 1.2px 1px black",
-            "description": "Injected CSS on classes, namespaces",
+            "description": "Injected CSS on classes, namespaces, modules",
             "scope": "language-overridable"
           }
         }
@@ -74,7 +74,7 @@
           "bigger-symbols.lightThemeNamespaceCSS": {
             "type": "string",
             "default": "font-size:120%; font-weight:bold; text-shadow: 0.8px 1px 1px rgba(32,32,32,0.2)",
-            "description": "Injected CSS on classes, namespaces",
+            "description": "Injected CSS on classes, namespaces, modules",
             "scope": "language-overridable"
           }
         }
@@ -194,6 +194,7 @@
           "bigger-symbols.enabledSymbols": {
             "type": "array",
             "default": [
+              "Modules",
               "Namespaces",
               "Classes",
               "Constructors",
@@ -207,6 +208,7 @@
             "items": {
               "type": "string",
               "enum": [
+                "Modules",
                 "Namespaces",
                 "Classes",
                 "Constructors",
@@ -218,6 +220,7 @@
                 "Variables"
               ],
               "enumDescriptions": [
+                "Enable `Modules`",
                 "Enable `Namespaces`",
                 "Enable `Classes`",
                 "Enable `Constructors`",

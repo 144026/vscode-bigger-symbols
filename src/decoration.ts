@@ -9,6 +9,7 @@ import {
 } from "vscode";
 
 export const NAMESPACE_SYMBOLS = [
+    "Modules",
     "Namespaces",
     "Classes",
 ];
@@ -97,6 +98,7 @@ export function updateDecorationsBiggerSymbol(activeEditor: TextEditor | undefin
 
     const ranges: Range[] = [];
 
+    // console.log(symbols);
     for (const symbol of symbols) {
         const symbolRange: Range = symbol.selectionRange;
         // console.log(symbolRange);

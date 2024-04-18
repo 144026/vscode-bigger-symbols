@@ -2,6 +2,7 @@ import { QuickPickItem, SymbolKind, window, workspace, TextEditor } from "vscode
 import { ALL_SYMBOLS } from "./symbols";
 
 export const DEFAULT_ENABLED_SYMBOLS = [
+    "Modules",
     "Namespaces",
     "Classes",
     "Constructors",
@@ -84,6 +85,8 @@ export async function selectSymbols(): Promise<boolean> {
 
 export function getSymbolKindAsKind(kind: string): SymbolKind {
     switch (kind) {
+        case "Modules":
+            return SymbolKind.Module;
         case "Namespaces":
             return SymbolKind.Namespace;
         case "Classes":

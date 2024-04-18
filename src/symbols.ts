@@ -1,6 +1,7 @@
 import { commands, DocumentSymbol, SemanticTokens, SemanticTokensLegend, SymbolKind, TextDocument, window, workspace } from "vscode";
 
 export const ALL_SYMBOLS = [
+    "Modules",
     "Namespaces",
     "Classes",
     "Constructors",

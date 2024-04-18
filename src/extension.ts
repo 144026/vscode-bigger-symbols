@@ -31,6 +31,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	const symbolsDecorationsType = new Map<string, vscode.TextEditorDecorationType>();
 
 	function createDecorations() {
+		symbolsDecorationsType.set("modules", createTextEditorDecoration("Modules", activeColorTheme.kind));
 		symbolsDecorationsType.set("namespaces", createTextEditorDecoration("Namespaces", activeColorTheme.kind));
 		symbolsDecorationsType.set("classes", createTextEditorDecoration("Classes", activeColorTheme.kind));
 		symbolsDecorationsType.set("constructors", createTextEditorDecoration("Constructors", activeColorTheme.kind));
