@@ -14,6 +14,24 @@ export const DEFAULT_ENABLED_SYMBOLS = [
     "Variables"
 ];
 
+export const DEFAULT_ENABLE_LANGID = [
+    "c",
+    "csharp",
+    "cpp",
+    "cuda-cpp",
+    "go",
+    "java",
+    "javascript",
+    "lua",
+    "objective-c",
+    "objective-cpp",
+    "python",
+    "perl",
+    "ruby",
+    "rust",
+    "typescript"
+];
+
 export const DEFAULT_VARIABLE_ENABLE_LANGID = [
     "c",
     "csharp",
@@ -21,16 +39,22 @@ export const DEFAULT_VARIABLE_ENABLE_LANGID = [
     "objective-c"
 ];
 
-export function mayUseBiggerSymbol(allowedLang: string[], activeEditor: TextEditor | undefined, kind: string) {
-    // TODO: for now, all other symbols are always enabled
-    if (kind !== "Variables") {
-        return true;
-    }
+export function mayUseBiggerSymbol(allowedLang: string[], varAllowedLang: string[],
+    activeEditor: TextEditor | undefined, kind: string) {
+
     if (!activeEditor) {
         return false;
     }
 
-    return allowedLang.includes(activeEditor.document.languageId);
+    if (!allowedLang.includes(activeEditor.document.languageId)) {
+        return false;
+    }
+
+    if (kind !== "Variables") {
+        return true;
+    } else {
+        return varAllowedLang.includes(activeEditor.document.languageId);
+    }
 }
 
 export async function showSelectSymbolsQuickPick(selectedSymbols: string[]): Promise<string[] | undefined> {

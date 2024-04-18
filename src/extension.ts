@@ -6,7 +6,12 @@ import {
 	updateDecorationsBiggerSymbol,
 	updateDecorationsTokens
 } from './decoration';
-import { DEFAULT_VARIABLE_ENABLE_LANGID, mayUseBiggerSymbol, DEFAULT_ENABLED_SYMBOLS, getEnabledSymbols, getSymbolKindAsKind, selectSymbols } from './selectSymbols';
+import {
+	DEFAULT_ENABLE_LANGID, DEFAULT_VARIABLE_ENABLE_LANGID, mayUseBiggerSymbol,
+	DEFAULT_ENABLED_SYMBOLS, getEnabledSymbols,
+	getSymbolKindAsKind,
+	selectSymbols
+} from './selectSymbols';
 import { ALL_SYMBOLS, findSymbols, findTokens, findTokensLegend } from './symbols';
 
 
@@ -26,7 +31,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	let activeEditor = vscode.window.activeTextEditor;
 	let activeColorTheme = vscode.window.activeColorTheme;
-	let enabledSymbols = vscode.workspace.getConfiguration("bigger-symbols").get("enabledSymbols", DEFAULT_ENABLED_SYMBOLS);
+	let enabledSymbolKinds = vscode.workspace.getConfiguration("bigger-symbols").get("enabledSymbols", DEFAULT_ENABLED_SYMBOLS);
+	let allowedLang = vscode.workspace.getConfiguration("bigger-symbols").get("allowedLanguages", DEFAULT_ENABLE_LANGID);
 	let varAllowedLang = vscode.workspace.getConfiguration("bigger-symbols").get("variablesAllowedLanguages", DEFAULT_VARIABLE_ENABLE_LANGID);
 	const symbolsDecorationsType = new Map<string, vscode.TextEditorDecorationType>();
 
@@ -57,10 +63,11 @@ export async function activate(context: vscode.ExtensionContext) {
 		}
 
 		let n: number = 0;
-		for (const kind of enabledSymbols) {
-			kindSymbols = [];
-			if (mayUseBiggerSymbol(varAllowedLang, vscode.window.activeTextEditor, kind)) {
+		for (const kind of enabledSymbolKinds) {
+			if (mayUseBiggerSymbol(allowedLang, varAllowedLang, vscode.window.activeTextEditor, kind)) {
 				kindSymbols = symbols.filter(s => s.kind === getSymbolKindAsKind(kind));
+			} else {
+				kindSymbols = [];
 			}
 
 			n += updateDecorationsBiggerSymbol(
@@ -136,7 +143,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		if (needCreate) {
 			// update closure
-			enabledSymbols = vscode.workspace.getConfiguration("bigger-symbols").get("enabledSymbols", DEFAULT_ENABLED_SYMBOLS);
+			enabledSymbolKinds = vscode.workspace.getConfiguration("bigger-symbols").get("enabledSymbols", DEFAULT_ENABLED_SYMBOLS);
+			allowedLang = vscode.workspace.getConfiguration("bigger-symbols").get("allowedLanguages", DEFAULT_ENABLE_LANGID);
 			varAllowedLang = vscode.workspace.getConfiguration("bigger-symbols").get("variablesAllowedLanguages", DEFAULT_VARIABLE_ENABLE_LANGID);
 
 			symbolsDecorationsType.forEach((value) => {

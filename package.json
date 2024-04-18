@@ -241,6 +241,36 @@
       },
       {
         "id": "bigger-symbols",
+        "title": "allowed languages",
+        "properties": {
+          "bigger-symbols.allowedLanguages": {
+            "type": "array",
+            "default": [
+              "c",
+              "csharp",
+              "cpp",
+              "cuda-cpp",
+              "go",
+              "java",
+              "javascript",
+              "lua",
+              "objective-c",
+              "objective-cpp",
+              "python",
+              "perl",
+              "ruby",
+              "rust",
+              "typescript"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "description": "Only language ids list here are allowed to use bigger symbol font. https://code.visualstudio.com/docs/languages/identifiers"
+          }
+        }
+      },
+      {
+        "id": "bigger-symbols",
         "title": "Variables: allowed languages",
         "properties": {
           "bigger-symbols.variablesAllowedLanguages": {
