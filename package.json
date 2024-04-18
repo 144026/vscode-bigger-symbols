@@ -1,0 +1,287 @@
+{
+  "name": "bigger-symbols",
+  "displayName": "Bigger Symbols",
+  "description": "Bigger symbol names like Source Insight, especially for C/C++",
+  "version": "0.0.9",
+  "publisher": "ruihuadong",
+  "author": {
+    "name": "Ruihua Dong"
+  },
+  "icon": "images/logo.png",
+  "engines": {
+    "vscode": "^1.44.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "bigger",
+    "symbols",
+    "C/C++"
+  ],
+  "extensionKind": [
+    "ui",
+    "workspace"
+  ],
+  "capabilities": {
+    "virtualWorkspaces": true,
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+  },
+  "license": "GPL-3.0",
+  "homepage": "https://github.com/144026/vscode-bigger-symbols/blob/master/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/144026/vscode-bigger-symbols.git"
+  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "bigger-symbols.toggleVisibility",
+        "title": "Bigger Symbols: Toggle Bigger Font Size"
+      },
+      {
+        "command": "bigger-symbols.selectSymbols",
+        "title": "Bigger Symbols: Select which symbols becomes bigger"
+      },
+      {
+        "command": "bigger-symbols.toggleDebug",
+        "title": "Bigger Symbols: Toggle Debug Logging"
+      }
+    ],
+    "configuration": [
+      {
+        "id": "bigger-symbols",
+        "title": "namespace font css when using dark themes",
+        "properties": {
+          "bigger-symbols.darkThemeNamespaceCSS": {
+            "type": "string",
+            "default": "font-size:120%; font-weight:bold; text-shadow: 1px 1.2px 1px black",
+            "description": "Injected CSS on classes, namespaces",
+            "scope": "language-overridable"
+          }
+        }
+      },
+      {
+        "id": "bigger-symbols",
+        "title": "namespace font css when using light themes",
+        "properties": {
+          "bigger-symbols.lightThemeNamespaceCSS": {
+            "type": "string",
+            "default": "font-size:120%; font-weight:bold; text-shadow: 0.8px 1px 1px rgba(32,32,32,0.2)",
+            "description": "Injected CSS on classes, namespaces",
+            "scope": "language-overridable"
+          }
+        }
+      },
+      {
+        "id": "bigger-symbols",
+        "title": "function font css when using dark themes",
+        "properties": {
+          "bigger-symbols.darkThemeFunctionCSS": {
+            "type": "string",
+            "default": "font-size:120%; text-shadow: 1px 1.2px 1px black",
+            "description": "Injected CSS on functions",
+            "scope": "language-overridable"
+          }
+        }
+      },
+      {
+        "id": "bigger-symbols",
+        "title": "function font css when using light themes",
+        "properties": {
+          "bigger-symbols.lightThemeFunctionCSS": {
+            "type": "string",
+            "default": "font-size:120%; text-shadow: 0.8px 1px 1px rgba(32,32,32,0.2)",
+            "description": "Injected CSS on functions",
+            "scope": "language-overridable"
+          }
+        }
+      },
+      {
+        "id": "bigger-symbols",
+        "title": "method font css when using dark themes",
+        "properties": {
+          "bigger-symbols.darkThemeMethodCSS": {
+            "type": "string",
+            "default": "font-size:110%; text-shadow: 0.8px 1px 1px black",
+            "description": "Injected CSS on constructors, methods",
+            "scope": "language-overridable"
+          }
+        }
+      },
+      {
+        "id": "bigger-symbols",
+        "title": "method font css when using light themes",
+        "properties": {
+          "bigger-symbols.lightThemeMethodCSS": {
+            "type": "string",
+            "default": "font-size:110%; text-shadow: 0.8px 1px 1px rgba(32,32,32,0.2)",
+            "description": "Injected CSS on constructors, methods",
+            "scope": "language-overridable"
+          }
+        }
+      },
+      {
+        "id": "bigger-symbols",
+        "title": "struct font css when using dark themes",
+        "properties": {
+          "bigger-symbols.darkThemeStructCSS": {
+            "type": "string",
+            "default": "font-size:120%; text-shadow: 0.8px 1px 1px black",
+            "description": "Injected CSS on enums, structs, interfaces",
+            "scope": "language-overridable"
+          }
+        }
+      },
+      {
+        "id": "bigger-symbols",
+        "title": "struct font css when using light themes",
+        "properties": {
+          "bigger-symbols.lightThemeStructCSS": {
+            "type": "string",
+            "default": "font-size:120%; text-shadow: 0.8px 1px 1px rgba(32,32,32,0.2)",
+            "description": "Injected CSS on enums, structs, interfaces",
+            "scope": "language-overridable"
+          }
+        }
+      },
+      {
+        "id": "bigger-symbols",
+        "title": "top-level variable font css when using dark themes",
+        "properties": {
+          "bigger-symbols.darkThemeVariableCSS": {
+            "type": "string",
+            "default": "font-size:110%",
+            "description": "Injected CSS on top-level variable",
+            "scope": "language-overridable"
+          }
+        }
+      },
+      {
+        "id": "bigger-symbols",
+        "title": "top-level variable font css when using light themes",
+        "properties": {
+          "bigger-symbols.lightThemeVariableCSS": {
+            "type": "string",
+            "default": "font-size:110%",
+            "description": "Injected CSS on top-level variable",
+            "scope": "language-overridable"
+          }
+        }
+      },
+      {
+        "id": "bigger-symbols",
+        "title": "max depth",
+        "properties": {
+          "bigger-symbols.maxDepth": {
+            "type": "integer",
+            "default": 2,
+            "description": "Max depth allowed on functions and methods, note that other kinds of symbols are kept top-level only for now. 1 for top-level only; 0 for infinite depth",
+            "scope": "language-overridable"
+          }
+        }
+      },
+      {
+        "id": "bigger-symbols",
+        "title": "enabled symbols",
+        "properties": {
+          "bigger-symbols.enabledSymbols": {
+            "type": "array",
+            "default": [
+              "Namespaces",
+              "Classes",
+              "Constructors",
+              "Methods",
+              "Functions",
+              "Enums",
+              "Structs",
+              "Interfaces",
+              "Variables"
+            ],
+            "items": {
+              "type": "string",
+              "enum": [
+                "Namespaces",
+                "Classes",
+                "Constructors",
+                "Methods",
+                "Functions",
+                "Enums",
+                "Structs",
+                "Interfaces",
+                "Variables"
+              ],
+              "enumDescriptions": [
+                "Enable `Namespaces`",
+                "Enable `Classes`",
+                "Enable `Constructors`",
+                "Enable `Methods`",
+                "Enable `Functions`",
+                "Enable `Enums`",
+                "Enable `Structs`",
+                "Enable `Interfaces`",
+                "Enable top-level `Variables`"
+              ]
+            },
+            "description": "enabled symbols",
+            "scope": "language-overridable"
+          }
+        }
+      },
+      {
+        "id": "bigger-symbols",
+        "title": "Variables: allowed languages",
+        "properties": {
+          "bigger-symbols.variablesAllowedLanguages": {
+            "type": "array",
+            "default": [
+              "c",
+              "csharp",
+              "cpp",
+              "objective-c"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "description": "If 'Variables' is selected to use bigger font-size, only language ids list here will be allowed to apply. https://code.visualstudio.com/docs/languages/identifiers"
+          }
+        }
+      }
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "vscode-ext"
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.44.0",
+    "@typescript-eslint/eslint-plugin": "^5.53.0",
+    "@typescript-eslint/parser": "^5.53.0",
+    "@vscode/test-electron": "^2.2.3",
+    "eslint": "^8.34.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "@vscode/vsce": "^2.19.0"
+  }
+}

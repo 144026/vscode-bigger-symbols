@@ -1,0 +1,6 @@
+out
+node_modules
+vsc-extension-quickstart.md
+package-lock.json
+*.vsix
+**/*.map
