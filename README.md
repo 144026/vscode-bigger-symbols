@@ -21,8 +21,8 @@ activeEditor.setDecorations(decoType, symbols.forEach(s => s.selectionRange));
 
 1. Text decoration gets cleared when active editor gets switched.
 2. Line height cannot be variant, symbols looks squashed if font size gets too big: https://github.com/microsoft/vscode/issues/131274
-3. Currently only breadcrumb outlint symbols are used. SemanticTokens stream maybe better, but not looked into. (getting full
-stream is every time is too slow, and don't know how to filter out non-declaration tokens yet).
+3. Currently only symbols from outline view are used. SemanticTokens stream maybe better, but not looked into. (getting full token
+stream every time is too slow, and don't know how to filter out non-declaration tokens yet).
 
 ## Reference
 
