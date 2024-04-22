@@ -7,6 +7,7 @@ import {
     SymbolKind,
     SemanticTokens, SemanticTokensLegend,
 } from "vscode";
+import { IBigSymbol } from "./symbols";
 
 export const NAMESPACE_SYMBOLS = [
     "Modules",
@@ -21,6 +22,7 @@ export const FUNCTION_SYMBOLS = [
 export const METHOD_SYMBOLS = [
     "Constructors",
     "Methods",
+    "Closures",
 ];
 
 export const STRUCT_SYMBOLS = [
@@ -83,7 +85,7 @@ const _gutterDeco = window.createTextEditorDecorationType({
 
 
 export function updateDecorationsBiggerSymbol(activeEditor: TextEditor | undefined,
-    symbols: DocumentSymbol[] | undefined,
+    symbols: IBigSymbol[] | undefined,
     decorationType: TextEditorDecorationType) {
 
     if (!activeEditor) {
@@ -99,7 +101,8 @@ export function updateDecorationsBiggerSymbol(activeEditor: TextEditor | undefin
     const ranges: Range[] = [];
 
     // console.log(symbols);
-    for (const symbol of symbols) {
+    for (const bigSymbol of symbols) {
+        const symbol = bigSymbol.sym;
         const symbolRange: Range = symbol.selectionRange;
         // console.log(symbolRange);
 

@@ -12,7 +12,7 @@ import {
 	getSymbolKindAsKind,
 	selectSymbols
 } from './selectSymbols';
-import { ALL_SYMBOLS, findSymbols, findTokens, findTokensLegend } from './symbols';
+import { ALL_SYMBOLS, IBigSymbol, findSymbols, findTokens, findTokensLegend } from './symbols';
 
 
 // this method is called when your extension is activated
@@ -43,6 +43,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		symbolsDecorationsType.set("constructors", createTextEditorDecoration("Constructors", activeColorTheme.kind));
 		symbolsDecorationsType.set("methods", createTextEditorDecoration("Methods", activeColorTheme.kind));
 		symbolsDecorationsType.set("functions", createTextEditorDecoration("Functions", activeColorTheme.kind));
+		symbolsDecorationsType.set("closures", createTextEditorDecoration("Closures", activeColorTheme.kind));
 		symbolsDecorationsType.set("enums", createTextEditorDecoration("Enums", activeColorTheme.kind));
 		symbolsDecorationsType.set("structs", createTextEditorDecoration("Structs", activeColorTheme.kind));
 		symbolsDecorationsType.set("interfaces", createTextEditorDecoration("Interfaces", activeColorTheme.kind));
@@ -55,8 +56,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// Evaluate (prepare the list) and DRAW
 	async function updateDecorations() {
-		let symbols: vscode.DocumentSymbol[] = [];
-		let kindSymbols: vscode.DocumentSymbol[];
+		let symbols: IBigSymbol[] = [];
+		let kindSymbols: IBigSymbol[];
 		if (isVisible) {
 			const selectedSymbols = getEnabledSymbols();
 			symbols = await findSymbols(selectedSymbols);
@@ -65,9 +66,19 @@ export async function activate(context: vscode.ExtensionContext) {
 		let n: number = 0;
 		for (const kind of enabledSymbolKinds) {
 			if (mayUseBiggerSymbol(allowedLang, varAllowedLang, vscode.window.activeTextEditor, kind)) {
-				kindSymbols = symbols.filter(s => s.kind === getSymbolKindAsKind(kind));
+				kindSymbols = symbols.filter(s => s.sym.kind === getSymbolKindAsKind(kind));
 			} else {
 				kindSymbols = [];
+			}
+
+			if (kind === "Functions") {
+				// treat nested functions as methods
+				n += updateDecorationsBiggerSymbol(
+					vscode.window.activeTextEditor,
+					kindSymbols.filter(s => s.level > 1),
+					symbolsDecorationsType.get("closures")!);
+				// only pass top-level as real Functions decoration
+				kindSymbols = kindSymbols.filter(s => s.level === 1);
 			}
 
 			n += updateDecorationsBiggerSymbol(

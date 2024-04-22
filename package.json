@@ -2,7 +2,7 @@
   "name": "bigger-symbols",
   "displayName": "Bigger Symbols",
   "description": "Bigger symbol names like Source Insight, especially for C/C++",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "publisher": "ruihuadong",
   "author": {
     "name": "Ruihua Dong"
@@ -88,7 +88,7 @@
           "bigger-symbols.darkThemeFunctionCSS": {
             "type": "string",
             "default": "font-size:120%; text-shadow: 1px 1.2px 1px black",
-            "description": "Injected CSS on functions",
+            "description": "Injected CSS on top-level functions",
             "scope": "language-overridable"
           }
         }
@@ -100,7 +100,7 @@
           "bigger-symbols.lightThemeFunctionCSS": {
             "type": "string",
             "default": "font-size:120%; text-shadow: 0.8px 1px 1px rgba(32,32,32,0.2)",
-            "description": "Injected CSS on functions",
+            "description": "Injected CSS on top-level functions",
             "scope": "language-overridable"
           }
         }
@@ -112,7 +112,7 @@
           "bigger-symbols.darkThemeMethodCSS": {
             "type": "string",
             "default": "font-size:110%; text-shadow: 0.8px 1px 1px black",
-            "description": "Injected CSS on constructors, methods",
+            "description": "Injected CSS on constructors, methods, nested functions",
             "scope": "language-overridable"
           }
         }
@@ -124,7 +124,7 @@
           "bigger-symbols.lightThemeMethodCSS": {
             "type": "string",
             "default": "font-size:110%; text-shadow: 0.8px 1px 1px rgba(32,32,32,0.2)",
-            "description": "Injected CSS on constructors, methods",
+            "description": "Injected CSS on constructors, methods, nested functions",
             "scope": "language-overridable"
           }
         }

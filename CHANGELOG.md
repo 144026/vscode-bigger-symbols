@@ -1,5 +1,12 @@
 # Change Log
 
+## [~0.0.11]
+
+- add files to git
+- treat Module symbol kind as Namespace
+- only allow a specific set of languages by default
+- treat nested Function as Method symbol kind
+
 ## [0.0.8]
 
 - Enable text shadow in CSS by default

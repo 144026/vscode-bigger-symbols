@@ -26,14 +26,19 @@ const NESTED_SYMBOLS = [
     SymbolKind.Interface,
 ];
 
+export interface IBigSymbol {
+    sym: DocumentSymbol;
+    level: number;
+};
+
 // there might be symbol definitions inside another definition
 // set maxDepth to 1 for top-level only; set to 0 for infinite depth
-function getSymbolsFrom(symbol: DocumentSymbol, level: number): DocumentSymbol[] {
-    const symbols: DocumentSymbol[] = [];
+function getSymbolsFrom(symbol: DocumentSymbol, level: number): IBigSymbol[] {
+    const symbols: IBigSymbol[] = [];
     // TODO: different languages use different mappings, e.g., union in C is mapping to SymbolKind.Class.
     //       we always want class names bigger like functions, but leave it for now.
     if (level < 2 || NESTED_SYMBOLS.includes(symbol.kind)) {
-        symbols.push(symbol);
+        symbols.push({sym: symbol, level: level});
     }
 
     const maxDepth: number = workspace.getConfiguration("bigger-symbols", window.activeTextEditor?.document).get("maxDepth", 1);
@@ -65,7 +70,7 @@ export async function findSymbols(symbolsToFind: SymbolKind[]) {
         return [];
     }
 
-    const symbols: DocumentSymbol[] = [];
+    const symbols: IBigSymbol[] = [];
     const level = 1;
 
     for (const symbol of docSymbols) {
@@ -75,7 +80,7 @@ export async function findSymbols(symbolsToFind: SymbolKind[]) {
     // console.log("ALL symbols:");
     // console.log(symbols);
     const filteredSymbols = symbols
-        ? symbols.filter(symbol => symbolsToFind.includes(symbol.kind))
+        ? symbols.filter(symbol => symbolsToFind.includes(symbol.sym.kind))
         : [];
 
     // console.log("filtered symbols:");
