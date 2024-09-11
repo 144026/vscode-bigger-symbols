@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.12]
+
+- document compatibility issues with vscode 1.88+
+
 ## [~0.0.11]
 
 - add files to git
