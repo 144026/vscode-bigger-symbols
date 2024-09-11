@@ -1,5 +1,7 @@
 # Bigger Symbols
 
+> NOTE: Incompatible with vscode 1.88+ (2024 March version)
+
 Make class, function, methods, structure declarations appear larger.
 
 ## Acknowledgement
@@ -16,6 +18,19 @@ const symbols = await commands.executeCommand('vscode.executeDocumentSymbolProvi
 const decoType = window.createTextEditorDecorationType({ textDecoration: `;font-size:120%` });
 activeEditor.setDecorations(decoType, symbols.forEach(s => s.selectionRange));
 ```
+
+> NOTE: `font-size` css injection no longer works since vscode 1.88+, probably after this commit:
+
+```
+commit 5faa55a173571edace9b667b9f4dd5e3b5136de3
+Author: Henning Dieterichs <hdieterichs@microsoft.com>
+Date:   Mon Mar 11 12:47:38 2024 +0100
+
+    Reapply "Refactors: Reduces assumptions about line height."
+```
+
+Other plugins relying on css injection have seen similar reports:
+https://github.com/hoovercj/vscode-power-mode/pull/114
 
 ## Limitations
 
