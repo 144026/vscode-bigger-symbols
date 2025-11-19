@@ -1,6 +1,6 @@
 # Bigger Symbols
 
-> NOTE: Incompatible with vscode 1.88+ (2024 March version)
+> NOTE: Incompatible with vscode 1.88 (2024 March version) ~ 1.99 (2025 March version).
 
 Make class, function, methods, structure declarations appear larger.
 
@@ -31,6 +31,8 @@ Date:   Mon Mar 11 12:47:38 2024 +0100
 
 Other plugins relying on css injection have seen similar reports:
 https://github.com/hoovercj/vscode-power-mode/pull/114
+
+As of vscode 1.100+ (2025 April version), this problem has been resolved.
 
 ## Limitations
 
