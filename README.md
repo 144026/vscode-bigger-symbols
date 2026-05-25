@@ -1,12 +1,6 @@
 # Bigger Symbols
 
-> NOTE: Incompatible with vscode 1.88 (2024 March version) ~ 1.99 (2025 March version).
-
-Make class, function, methods, structure declarations appear larger.
-
-## Acknowledgement
-
-This extension draws heavily on alefragnani/vscode-separators, huge thanks.
+Make class, function/method, structure, global variable declarations appear larger.
 
 ## How does it work
 
@@ -19,26 +13,27 @@ const decoType = window.createTextEditorDecorationType({ textDecoration: `;font-
 activeEditor.setDecorations(decoType, symbols.forEach(s => s.selectionRange));
 ```
 
-> NOTE: `font-size` css injection no longer works since vscode 1.88+, probably after this commit:
+## Compatibility
+
+Compatible with vscode >= 1.100 or vscode < 1.88, and any vscode-derived IDE alike, eg. Cursor.
+
+The incompatible gap most likely due to this git commit, which has been resolved since vscode 1.100.
 
 ```
 commit 5faa55a173571edace9b667b9f4dd5e3b5136de3
-Author: Henning Dieterichs <hdieterichs@microsoft.com>
+Author: ******* (not shown)
 Date:   Mon Mar 11 12:47:38 2024 +0100
 
     Reapply "Refactors: Reduces assumptions about line height."
 ```
 
-Other plugins relying on css injection have seen similar reports:
-https://github.com/hoovercj/vscode-power-mode/pull/114
-
-As of vscode 1.100+ (2025 April version), this problem has been resolved.
+Other plugins relying on css injection have seen similar compatiblity [issues](https://github.com/hoovercj/vscode-power-mode/pull/114).
 
 ## Limitations
 
-1. Text decoration gets cleared when active editor gets switched.
-2. Line height cannot be variant, symbols looks squashed if font size gets too big: https://github.com/microsoft/vscode/issues/131274
-3. Currently only symbols from outline view are used. SemanticTokens stream maybe better, but not looked into. (getting full token
+1. Text decorations, by design, are cleared when active editor change and re-rendered when editor switches back.
+2. Text decorations can not change editor line height, symbols will look squashed if font size gets too big. https://github.com/microsoft/vscode/issues/131274
+3. Only symbols from outline view are used. SemanticTokens stream maybe better, but not looked into. (getting full token
 stream every time is too slow, and don't know how to filter out non-declaration tokens yet).
 
 ## Reference
@@ -47,7 +42,7 @@ stream every time is too slow, and don't know how to filter out non-declaration 
 2. get DocumentSymbols, example: https://github.com/alefragnani/vscode-separators/blob/master/src/symbols.ts#L51
 3. text decoration repainting problem: https://github.com/microsoft/vscode/issues/136241
 4. "extra decoration" above current line: code lens api https://code.visualstudio.com/Docs/editor/editingevolved#_reference-information
-5. *support dynamic line heights using decorations (work in progress)*: https://github.com/microsoft/vscode/pull/194609
+5. *support dynamic line heights using decorations (merged but not available to extensions)*: https://github.com/microsoft/vscode/pull/194609
 6. get SemanticTokens, API: https://code.visualstudio.com/api/references/commands
 7. SemanticTokens.data[] organization: index.d.ts
 8. semantic highlight: https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide

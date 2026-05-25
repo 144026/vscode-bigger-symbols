@@ -29,7 +29,6 @@ export async function activate(context: vscode.ExtensionContext) {
 	};
 	console.log('bigger-symbols is now active!');
 
-	let activeEditor = vscode.window.activeTextEditor;
 	let activeColorTheme = vscode.window.activeColorTheme;
 	let enabledSymbolKinds = vscode.workspace.getConfiguration("bigger-symbols").get("enabledSymbols", DEFAULT_ENABLED_SYMBOLS);
 	let allowedLang = vscode.workspace.getConfiguration("bigger-symbols").get("allowedLanguages", DEFAULT_ENABLE_LANGID);
@@ -55,7 +54,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	let isVisible = context.workspaceState.get<boolean>('bigger-symbols.visible', true);
 
 	// Evaluate (prepare the list) and DRAW
-	async function updateDecorations() {
+	async function updateDecorations(editor: vscode.TextEditor) {
 		let symbols: IBigSymbol[] = [];
 		let kindSymbols: IBigSymbol[];
 		if (isVisible) {
@@ -65,7 +64,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		let n: number = 0;
 		for (const kind of enabledSymbolKinds) {
-			if (mayUseBiggerSymbol(allowedLang, varAllowedLang, vscode.window.activeTextEditor, kind)) {
+			if (mayUseBiggerSymbol(allowedLang, varAllowedLang, editor, kind)) {
 				kindSymbols = symbols.filter(s => s.sym.kind === getSymbolKindAsKind(kind));
 			} else {
 				kindSymbols = [];
@@ -74,7 +73,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			if (kind === "Functions") {
 				// treat nested functions as methods
 				n += updateDecorationsBiggerSymbol(
-					vscode.window.activeTextEditor,
+					editor,
 					kindSymbols.filter(s => s.level > 1),
 					symbolsDecorationsType.get("closures")!);
 				// only pass top-level as real Functions decoration
@@ -82,7 +81,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			}
 
 			n += updateDecorationsBiggerSymbol(
-				vscode.window.activeTextEditor,
+				editor,
 				kindSymbols,
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				symbolsDecorationsType.get(kind.toLocaleLowerCase())!);
@@ -106,42 +105,39 @@ export async function activate(context: vscode.ExtensionContext) {
 		// await updateDecorationsTokens(vscode.window.activeTextEditor,tokens,tokensLegend);
 		// console.log("updated tokens");
 	}
-
-	function triggerUpdateDecorations(throttle: boolean = false) {
-		debug("setup trigger update, throttle:", throttle);
+	async function udpateAllDecorations() {
+		vscode.window.visibleTextEditors.forEach(async editor => {
+			updateDecorations(editor);
+		});
+	}
+	function updateDecorationsThrottled(editor: vscode.TextEditor) {
+		debug("setup trigger update");
 		// always schedule a new delayed task
 		if (timeout) {
 			clearTimeout(timeout);
 		}
-		if (throttle) {
-			timeout = setTimeout(updateDecorations, 150);
-		} else {
-			timeout = setTimeout(updateDecorations, 0);
-		}
+		timeout = setTimeout(updateDecorations, 150, editor);
 	}
 
-	if (activeEditor) {
-		triggerUpdateDecorations(true);
-	}
-
-	vscode.window.onDidChangeActiveTextEditor(editor => {
-		activeEditor = editor;
-		if (editor) {
-			// NOTE: There is a race condition between lsp-plugins activating and us requesting symbols, (especially Python plugin, it starts quiet slowly)
-			// because we always want to show decorations asap after switched to new tab, the race is unavoidable.
-			triggerUpdateDecorations();
-		}
-	}, null, context.subscriptions);
-
+	// NOTE: There is a race condition between lsp-plugins activating and us requesting symbols, (especially Python plugin, it starts quiet slowly)
+	// because we always want to show decorations asap after switched to new tab, the race is unavoidable.
+	// setTimeout(udpateAllDecorations, 1000);
+	udpateAllDecorations();
+	vscode.window.onDidChangeVisibleTextEditors(e => {
+		e.forEach(async editor => {
+			updateDecorations(editor);
+		});
+	});
 	vscode.workspace.onDidChangeTextDocument(event => {
-		if (event.contentChanges.length === 0) {
+		// if (event.contentChanges.length === 0) {
+		// 	return;
+		// }
+		const activeEditor = vscode.window.activeTextEditor;
+		if (!activeEditor) {
 			return;
 		}
-		if (activeEditor && event.document === activeEditor.document) {
-			// updateDecorations();
-			triggerUpdateDecorations(true);
-		}
-	}, null, context.subscriptions);
+		updateDecorationsThrottled(activeEditor);
+	});
 
 	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(cfg => {
 		let needCreate: boolean = false;
@@ -162,19 +158,19 @@ export async function activate(context: vscode.ExtensionContext) {
 				value.dispose();
 			});
 			createDecorations();
-			updateDecorations();
+			udpateAllDecorations();
 		}
 	}));
 
 	vscode.commands.registerCommand("bigger-symbols.toggleVisibility", () => {
 		isVisible = !isVisible;
 		context.workspaceState.update('bigger-symbols.visible', isVisible);
-		updateDecorations();
+		udpateAllDecorations();
 	});
 
 	vscode.commands.registerCommand("bigger-symbols.selectSymbols", async () => {
 		if (await selectSymbols()) {
-			updateDecorations();
+			udpateAllDecorations();
 		}
 	});
 
